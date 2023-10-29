@@ -9,6 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  flutter_hooks: ^0.20.3
+  three_dart: ^0.0.16
+  three_dart_jsm: ^0.0.10
 
 dev_dependencies:
   flutter_test:
