@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:three_dimensional_viewer/model_viewer.dart';
 import 'package:three_dimensional_viewer/view_type.dart';
 
-class ObjectViewer extends HookWidget {
+class ObjectViewer extends StatelessWidget {
   const ObjectViewer({super.key});
 
   final ViewType viewType = ViewType.objectViewer;
@@ -11,9 +10,7 @@ class ObjectViewer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(viewType.name),
-      ),
+      backgroundColor: Colors.black,
       body: ModelViewer3D(
         viewType: viewType,
       ),

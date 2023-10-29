@@ -103,7 +103,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_gl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_gl
       sha256: de74c88f77228f47dd280e2092b50eb49fe1fc008de74047d195a27f2db0b491

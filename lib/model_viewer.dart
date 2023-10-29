@@ -1,5 +1,3 @@
-// ignore_for_file: no_logic_in_create_state
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:three_dart/three_dart.dart';
@@ -10,17 +8,10 @@ import 'package:three_dimensional_viewer/view_type.dart';
 class ModelViewer3D extends HookWidget {
   final String? path;
   final ViewType viewType;
-  late ModelLoader state;
 
-  ModelViewer3D({super.key, this.path, required this.viewType}) {
-    if (viewType == ViewType.fbxmodelViewer) {
-      state = FBXModelViewLoader();
-    } else if (viewType == ViewType.objectViewer) {
-      state = ObjectViewLoader();
-    }
-  }
+  const ModelViewer3D({super.key, this.path, required this.viewType});
 
-  void updateCameraPosition(Offset delta) {
+  void updateCameraPosition(ModelLoader state, Offset delta) {
     const sensitivity = 0.01;
     Vector3 position = state.camera!.position;
     position.x -= delta.dx * sensitivity;
@@ -30,31 +21,40 @@ class ModelViewer3D extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      state = state.initialize(context, path);
-      state.loadModel(path);
-      return () {};
-    }, [state.isLoading, state.loadedModel]);
+    final state = useState(viewType == ViewType.fbxmodelViewer
+        ? FBXModelViewLoader(context, path)
+        : ObjectViewLoader(context, path));
 
-    if (state.isLoading) {
+    if (state.value.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (state.loadedModel == null) {
+    if (state.value.loadedModel == null) {
       return const Center(
         child: Text('No model loaded'),
       );
     }
-    return Center(
-      child: AspectRatio(
-        aspectRatio: 1.0,
-        child: GestureDetector(
-          onPanUpdate: (details) => updateCameraPosition(details.delta),
-          child: CustomPaint(
-            size: state.size!,
-            painter: ModelPainter3D(state.loadedModel, state.camera),
+    return Column(
+      children: [
+        Text(
+          state.value.toJson().toString(),
+          style: const TextStyle(color: Colors.white),
+        ),
+        Expanded(
+          child: Center(
+            child: SizedBox.square(
+              dimension: 300,
+              child: CustomPaint(
+                size: state.value.size! * 0.5,
+                painter: ModelPainter3D(
+                  state.value.loadedModel,
+                  state.value.camera,
+                  state.value.size,
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
