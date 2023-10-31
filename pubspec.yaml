@@ -9,11 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  flutter_gl: ^0.0.21
+
   flutter_hooks: ^0.20.3
-  three_dart: ^0.0.16
-  three_dart_jsm: ^0.0.10
+  model_viewer_plus: ^1.7.0
 
 dev_dependencies:
   flutter_test:
